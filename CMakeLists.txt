@@ -20,6 +20,6 @@ set(CMAKE_BUILD_TYPE Debug)
 add_compile_options(-pthread)
 add_link_options(-pthread)
 
-add_executable(main src/lab8_sol.c)
+add_executable(main src/lab8.c)
 target_include_directories(main PRIVATE include)
 
