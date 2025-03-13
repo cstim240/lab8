@@ -33,9 +33,6 @@ static void add_word_counts_in_chunk(count_map_t *map, word_t *words,
 
   for (size_t i = 0; i < num_words; i++) {
     word_count_entry_t *w = NULL;
-
-    pthread_mutex_lock(lock);
-
     HASH_FIND_STR(*map, words[i], w);
 
     if (w) {
@@ -43,10 +40,6 @@ static void add_word_counts_in_chunk(count_map_t *map, word_t *words,
     } else {
       w = create_entry(words[i], 1);
       HASH_ADD_STR(*map, word, w);
-    }
-
-    if (lock) {
-      pthread_mutex_unlock(lock);
     }
   }
 }
@@ -80,7 +73,7 @@ static count_map_t count_words_parallel(word_t *words, size_t num_words) {
     count_thread_args_t *args =
         pack_args(&map, thread_arg_words, thread_arg_num_words, &count_mutex);
     // TODO: Prepare the arguments and launch the threads
-
+    
     threads_args[i] = args;
 
     pthread_create(&threads[i], NULL, counter_thread_func, args);
